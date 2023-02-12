@@ -45,7 +45,7 @@ export const buySubscription = catchAsyncError(async (req, res, next) => {
   })
   res.status(201).json({
     success:true,
-    payment_intent:subscription.latest_invoice.payment_intent.id,
+    subscriptionId:subscription.id,
     message:"Subscribed successfully."
   })
 });
