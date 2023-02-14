@@ -5,7 +5,7 @@ import getDataUri from '../utils/dataUri.js';
 import cloudinary from 'cloudinary';
 import {Stats} from '../models/Stats.js';
 export const createCourse = catchAsyncError(async(req,res,next)=>{
-  const {title,description,category,createdBy} = req.body  
+  const {title,description,category,createdBy} = req.body 
   if(!title || !description || !category || !createdBy){
     return next(new ErrorHandler("Please add all fields",400))
   }
@@ -41,21 +41,16 @@ export const getCourseLectures = catchAsyncError(async(req,res,next)=>{
   })
 })
 export const addLecture = catchAsyncError(async(req,res,next)=>{
-  const {title,description} = req.body
+  const {title,description,public_id,secure_url} = req.body
   const course = await Course.findById(req.params.id);
   if(!course) return next(new ErrorHandler("Course not found",404));
-  const file = req.file;
-  const fileUri = getDataUri(file);
   
-  const mycloud = await cloudinary.v2.uploader.upload(fileUri.content,{
-    resource_type:"video",
-  })
   course.lectures.push({
     title,
     description,
     video:{
-      public_id:mycloud.public_id,
-      url:mycloud.secure_url
+      public_id,
+      url:secure_url
     }
   })
 
